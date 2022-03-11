@@ -33,15 +33,11 @@ if (output is not None) and (not RUN_STATUS):
   USER_STREAM.write(FINAL_REPORT_TEMPLATE %exercise_data_text, unsafe_allow_html=True)
 
 def main():
-  # start_time =  time.time()
   second_start = time.time()
   me = MainEngine()
-  # global output_hist
-  # output_hist = None
 
   camera = cv2.VideoCapture(0)
   while camera.isOpened() and RUN_STATUS:
-    # start_time =  time.time()
     _, frame = camera.read()
     frame = cv2.flip(frame, 1)   # Horizontally flip the frame for mirror image
     USER_STREAM.image(frame, channels='BGR')
@@ -69,42 +65,21 @@ def main():
         error = output['error']
         USER_FEEDBACK.write(USER_FEEDBACK_TEMPLATE %error, unsafe_allow_html=True)
       
-      # output_hist = output
-      # print("Hist : ", output_hist)
       st.session_state['output'] = output
   
   camera.release()
   cv2.destroyAllWindows()
-  # Get the final analysis of user exercise data 
 
-  # from utils.frame_extractor import FrameExtractor
-
-  # fex = FrameExtractor(time_interval=50)
-  # time_now = time.time()
-  # me = MainEngine()
-  # frames = fex.get_frames('../resources/videos/user_video_webcam.mp4')
-  # print("%d frames" %len(frames))
-  # print("Started..")
-  # for i,frame in enumerate(frames):
-  #   USER_STREAM.image(frame, channels='BGR')
-  #   me.push((time_now, frame))
-  #   # time.sleep(0.5)
-  #   print("Pushed.. %d"%(i+1))
-  #   output = me.get_output()
-  #   if output is not None:
-  #     # print(output)
-  #     if output.startswith('add:'):
-  #       output = output.replace('add:','')
-  #       print(output)
-  
   # me.speech.stop()
 
   output = me.get_output()
   while output is not None:
+    # process any remaining outputs to make the queue empty
     st.session_state['output'] = output
   
   # me.stop()
 
 
 if __name__ == '__main__' and (output is not None):
+  # This prevents streamlit from re-runnning the whole app in case of click or change event
   main()
