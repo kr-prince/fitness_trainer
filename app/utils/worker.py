@@ -24,10 +24,8 @@ class Worker(ABC):
   def run(self):
     # This function starts the main method for this worker after setting up the queues 
     # for communicaton
-    # self.running = True
     self.inputs = mp.Queue()
     self.outputs = mp.Queue()
-    # self.proc = ctx.Process(target=self.main, args=(self.inputs, self.outputs))
     self.proc = mp.Process(target=self.main)
     self.proc.start()
 
@@ -36,12 +34,6 @@ class Worker(ABC):
     # This function will kill the process
     self.inputs.put(0)
     # print("%s:  Inputs(%s)  Outputs(%s)" %(self.name(), self.inputs.empty(), self.outputs.empty()))
-    # while not self.inputs.empty():
-    #   # self.outputs.get()
-    #   print("Not empty: ", self.name())
-    #   pass
-    # else:
-    #   print("Empty: ", self.name())
     self.proc.join()
     print("%s killed with code %s" %(self.name(), str(self.proc.exitcode)))
 
