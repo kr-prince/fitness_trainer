@@ -2,6 +2,7 @@
 
 This repository contains the code for virtual fitness trainer application developed as part of capstone project for PGDAIML course - jointly run by the University of Hyderabad and AppliedRoots.
 
+
 ## Setup
 
 1. Install Anaconda. Refer [official docs](https://docs.anaconda.com/anaconda/install/index.html)
@@ -18,6 +19,11 @@ This repository contains the code for virtual fitness trainer application develo
 	```
 
 Please feel free to add and contribute
+
+
+## TODO
+	* Handle multi-processing in a better way
+
 
 ## Application Preview
 
