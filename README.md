@@ -18,3 +18,10 @@ This repository contains the code for virtual fitness trainer application develo
 	```
 
 Please feel free to add and contribute
+
+## Application Preview
+
+![Image1](https://github.com/kr-prince/fitness_trainer/blob/main/resources/output/pic1.png)
+![Image2](https://github.com/kr-prince/fitness_trainer/blob/main/resources/output/pic2.png)
+![Image3](https://github.com/kr-prince/fitness_trainer/blob/main/resources/output/pic3.png)
+![Image4](https://github.com/kr-prince/fitness_trainer/blob/main/resources/output/pic4.png)
