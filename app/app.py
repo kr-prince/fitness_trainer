@@ -17,6 +17,7 @@ FINAL_REPORT_TEMPLATE = '<span style="font-family:sans-serif; color:Red; font-si
   <ul style="list-style-type:circle;">%s</ul></span>'
 
 output = st.session_state.get('output', None)
+total_time = st.session_state.get('total_time', 0.0)
 if (output is not None) and (not RUN_STATUS):
   # If the app is not in running state, we show the exercises data for the user so far
   sets_counts = output['sets_counts']
@@ -28,11 +29,16 @@ if (output is not None) and (not RUN_STATUS):
   non_ex_counts = pose_counts.get('random', 0)
   ex_counts = sum([v for k,v in pose_counts.items() if k != 'random'])
   # Exercise intensity is the ratio of exercise related poses with total(including random) poses
-  k,v = 'Intensity',round(ex_counts/(ex_counts + non_ex_counts),1)
+  k = 'Intensity'
+  v = round(ex_counts/(ex_counts + non_ex_counts),1) if (ex_counts+non_ex_counts)>0 else 0.0
   exercise_data_text += '<li>'+k.replace('_',' ').title()+' - '+str(v)+'</li>'
+  # Also add the total exercise time
+  total_time = '%d mins : %d secs' %(int(total_time//60), int(total_time%60))
+  exercise_data_text += '<li>'+'Total time - '+total_time+'</li>'
   USER_STREAM.write(FINAL_REPORT_TEMPLATE %exercise_data_text, unsafe_allow_html=True)
 
 def main():
+  start_time = time.time()
   second_start = time.time()
   me = MainEngine()
 
@@ -66,20 +72,24 @@ def main():
         USER_FEEDBACK.write(USER_FEEDBACK_TEMPLATE %error, unsafe_allow_html=True)
       
       st.session_state['output'] = output
+
+    # Update total time
+    st.session_state['total_time'] = (time_now-start_time)
   
   camera.release()
   cv2.destroyAllWindows()
 
-  # me.speech.stop()
-
+  me.speech.stop()
   output = me.get_output()
   while output is not None:
     # process any remaining outputs to make the queue empty
     st.session_state['output'] = output
-  
-  # me.stop()
+  st.session_state['total_time'] = (time.time()-start_time)
+  me.stop()
+
+  print("System exiting..")
 
 
-if __name__ == '__main__' and (output is not None):
+if __name__ == '__main__' and (output is None):
   # This prevents streamlit from re-runnning the whole app in case of click or change event
   main()
