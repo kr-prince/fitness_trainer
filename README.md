@@ -22,7 +22,7 @@ Please feel free to add and contribute
 
 
 ## TODO
-	* Handle multi-processing in a better way
+* Handle multi-processing in a better way
 
 
 ## Application Preview
